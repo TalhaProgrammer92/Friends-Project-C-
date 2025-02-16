@@ -4,5 +4,5 @@ using namespace std;
 
 int main()
 {
-    cout << "Welcome to SOS Game ☻" << endl;
+    cout << "Welcome to Tic Tac Game ☻" << endl;
 }
