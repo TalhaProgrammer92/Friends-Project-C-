@@ -26,8 +26,6 @@ Want to contribute? Awesome! Follow these steps:
 4. Submit a **Pull Request** when ready 🚀  
 
 ## 📢 Stay Connected  
-Drop your ideas, suggestions, and feedback in the Issues tab or hit us up on Discord!  
+Drop your ideas, suggestions, and feedback in the Issues tab
 
 ### ⭐ Don't forget to star the repo if you find it useful!  
-
-Happy Coding! 🎉  
