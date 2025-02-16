@@ -30,6 +30,6 @@ const string Color::ForeGround::Cyan = "\033[96m";
 
 int main()
 {
-    string message = "Welcome to Tic Tac Game ☻";
+    string message = "Welcome to Tic Tac Game";
     cout << Color::ForeGround::Green + message + Color::Reset << endl;
 }
