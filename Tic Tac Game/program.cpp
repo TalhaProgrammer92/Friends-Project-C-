@@ -14,5 +14,5 @@ const string BLUE = "\033[34m";       /* Blue */
 int main()
 {
     string message = "Welcome to Tic Tac Game";
-    cout << Color::ForeGround::Green + message + Color::Reset << endl;
+    cout << GREEN << message << RESET << endl;
 }
