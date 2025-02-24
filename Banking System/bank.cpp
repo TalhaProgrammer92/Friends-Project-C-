@@ -2,30 +2,60 @@
 
 using namespace std;
 
-//? Global variables
+// ? Global variables
 int accountNumber = 0;
 
 ////////////////////////
 //? Account class
 ////////////////////////
-class Account
-{
-    //* Attributes
-    int id;
-    double balance;
-    string name;
-
-public:
-    //* Constructor
-    Account(string name, double balance)
-    {
-        this->name = name;
-        this->balance = balance;
-        this->id = ++accountNumber;
-    }
+class Account{
+    //* Variables
+    private:
+        int id;
+        string name;
+        double balance;
+    public:
+        //* Constructor
+        Account(string name, double balance){
+            this->id = ++accountNumber;
+            this->name = name;
+            this->balance = balance;
+        }
+        //* Getters
+        int getId(){
+            return this->id;
+        }
+        string getName(){
+            return this->name;
+        }
+        double getBalance(){
+            return this->balance;
+        }
+        //* Setters
+        void setName(string name){
+            this->name = name;
+        }
+        void setBalance(double balance){
+            this->balance = balance;
+        }
+        //* Methods
+        void deposit(double amount){
+            this->balance += amount;
+        }
+        void withdraw(double amount){
+            if(this->balance - amount < 0){
+                cout << "Insufficient funds" << endl;
+            }else{
+                this->balance -= amount;
+            }
+        }
+        void display(){
+            cout << "Account ID: " << this->id << endl;
+            cout << "Name: " << this->name << endl;
+            cout << "Balance: " << this->balance << endl;
+        }
 };
 
 int main()
 {
-    Account account1("Talha Ahmad", 15000), account2("Areeb", 20000);
-}
+    
