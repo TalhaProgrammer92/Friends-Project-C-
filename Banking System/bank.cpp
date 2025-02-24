@@ -41,8 +41,13 @@ public:
 ////////////////////////
 int main()
 {
-    Account account1("Talha Ahmad", 15000), account2("Areeb", 20000);
+    //* Creating objects of Account class
+    Account account1("Talha Ahmad", 15000), account2("Areeb", 25000);
 
+    //* Diposit (to account1) and withdraw (from account2) cash
+    account1.deposit(account2.withdraw(5000));
+    
+    //* Displaying account's information
     account1.display();
     account2.display();
 }
