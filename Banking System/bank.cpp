@@ -8,7 +8,7 @@ int accountNumber = 0;
 ////////////////
 // Account
 ////////////////
-class TAccount{
+class Account{
     //* Variables
     private:
         int id;
@@ -16,7 +16,7 @@ class TAccount{
         double balance;
     public:
         //* Constructor
-        TAccount(string name, double balance){
+        Account(string name, double balance){
             this->id = ++accountNumber;
             this->name = name;
             this->balance = balance;
@@ -58,6 +58,7 @@ class TAccount{
 
 int main()
 {
-    TAccount talha_account("Talha", 5000);
+    Account talha_account("Talha", 5000);
+    talha_account.deposit(500);
     talha_account.display();
 }
