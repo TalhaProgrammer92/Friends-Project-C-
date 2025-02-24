@@ -59,4 +59,5 @@ class TAccount{
 int main()
 {
     TAccount talha_account("Talha", 5000);
+    talha_account.display();
 }
