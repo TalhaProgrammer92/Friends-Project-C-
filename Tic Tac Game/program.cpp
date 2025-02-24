@@ -25,8 +25,8 @@ void printColor(char character, const string color);
 ////////////////////////////
 int main()
 {
-    string message = "Welcome to Tic Tac Game";
-    cout << GREEN << message << RESET << endl;
+    printColor("Hello World!", MAGENTA);
+    cout << endl;
 }
 
 
