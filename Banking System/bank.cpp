@@ -51,3 +51,34 @@ int main()
     account1.display();
     account2.display();
 }
+
+
+////////////////////////
+//? Account class
+////////////////////////
+//* Method - Deposit cash to account
+void Account::deposit(double amount)
+{
+    balance += amount;
+}
+
+//* Method - Withdraw cash from account
+double Account::withdraw(double amount)
+{
+    if (balance - amount < 0)
+    {
+        cout << "Insufficient balance" << endl;
+        return 0;
+    }
+    balance -= amount;
+    return amount;
+}
+
+//* Method - Display account's information
+void Account::display()
+{
+    cout << "ID: " << id << endl;
+    cout << "Name: " << name << endl;
+    cout << "Balance: " << balance << endl;
+    cout << endl;
+}
