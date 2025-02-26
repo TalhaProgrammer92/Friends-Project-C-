@@ -62,32 +62,36 @@ int main()
 
     //* Local variables
     int choice;
-    cout << "1- Create account, 2- Display all accounts, 3- Open Existing Account" << endl;
-    cin >> choice;
 
-    //* Local variable for account id
-    int id;
-
-    //* Declare account variable
-    Account account("", 0);
-
-    //* Switch case for user choice
-    switch (choice)
+    while (true)
     {
-    case 1:
-        bank.createAccount();
-        break;
-    case 2:
-        bank.displayAllAccounts();
-        break;
-    case 3:
-        cout << "Enter account id: ";
-        cin >> id;
-        account = bank.getAccount(id);
-        account.display();
-        break;
-    default:
-        cout << "Invalid choice" << endl;
+        cout << "1- Create account, 2- Display all accounts, 3- Open Existing Account" << endl;
+        cin >> choice;
+
+        //* Local variable for account id
+        int id;
+
+        //* Declare account variable
+        Account account("", 0);
+
+        //* Switch case for user choice
+        switch (choice)
+        {
+        case 1:
+            bank.createAccount();
+            break;
+        case 2:
+            bank.displayAllAccounts();
+            break;
+        case 3:
+            cout << "Enter account id: ";
+            cin >> id;
+            account = bank.getAccount(id);
+            account.display();
+            break;
+        default:
+            break;
+        }
     }
 }
 
