@@ -42,7 +42,7 @@ public:
 int main()
 {
     //* Creating objects of Account class
-    Account account1("Talha Ahmad", 15000), account2("Areeb", 25000);
+    Account account1("Talha Ahmad", 15000), account2("Areeb", 25000), account3("Raza", 20000);
 
     //* Diposit (to account1) and withdraw (from account2) cash
     account1.deposit(account2.withdraw(5000));
@@ -50,6 +50,7 @@ int main()
     //* Displaying account's information
     account1.display();
     account2.display();
+    account3.display();
 }
 
 
