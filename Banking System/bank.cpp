@@ -65,6 +65,12 @@ int main()
     cout << "1- Create account, 2- Display all accounts, 3- Open Existing Account" << endl;
     cin >> choice;
 
+    //* Local variable for account id
+    int id;
+
+    //* Declare account variable
+    Account account("", 0);
+
     //* Switch case for user choice
     switch (choice)
     {
@@ -75,10 +81,9 @@ int main()
         bank.displayAllAccounts();
         break;
     case 3:
-        int id;
         cout << "Enter account id: ";
         cin >> id;
-        Account account = bank.getAccount(id);
+        account = bank.getAccount(id);
         account.display();
         break;
     default:
