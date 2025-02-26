@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -33,6 +34,19 @@ public:
     void deposit(double amount);
     double withdraw(double amount);
     void display();
+};
+
+
+////////////////////////
+//? Bank class
+////////////////////////
+class Bank
+{
+    //* Attributes
+    vector<Account> accounts;
+
+    public:
+    //* Methods
 };
 
 
