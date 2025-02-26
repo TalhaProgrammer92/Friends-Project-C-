@@ -18,6 +18,8 @@ class Account
 
 public:
     //* Constructor
+    Account(){}
+
     Account(string name, double balance)
     {
         this->name = name;
@@ -65,14 +67,14 @@ int main()
 
     while (true)
     {
-        cout << "1- Create account, 2- Display all accounts, 3- Open Existing Account" << endl;
+        cout << "1- Create account, 2- Display all accounts, 3- Open Existing Account, 4- Transfer Money? " << endl;
         cin >> choice;
 
         //* Local variable for account id
         int id;
 
         //* Declare account variable
-        Account account("", 0);
+        Account account, from, to;
 
         //* Switch case for user choice
         switch (choice)
@@ -88,6 +90,21 @@ int main()
             cin >> id;
             account = bank.getAccount(id);
             account.display();
+            break;
+        case 4:
+            cout << "Enter account id from which you want to transfer: ";
+            cin >> id;
+            from = bank.getAccount(id);
+
+            cout << "Enter account id to which you want to transfer: ";
+            cin >> id;
+            to = bank.getAccount(id);
+
+            cout << "Enter amount: ";
+            double amount;
+            cin >> amount;
+
+            bank.transfer(from, to, amount);
             break;
         default:
             break;
