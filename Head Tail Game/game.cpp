@@ -43,7 +43,7 @@ public:
         this->name = name;
         this->score = 0;
     }
-}
+};
 
 //////////////////////////////
 //? Main Function
