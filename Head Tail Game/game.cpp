@@ -27,10 +27,29 @@ public:
     int get();
 };
 
+/////////////////////
+//? Player class
+/////////////////////
+class Player
+{
+    //* Attributes
+    string name;
+    int score;
+
+public:
+    //* Constructor
+    Player(string name)
+    {
+        this->name = name;
+        this->score = 0;
+    }
+}
+
 //////////////////////////////
 //? Main Function
 //////////////////////////////
-int main()
+int
+main()
 {
     Dice dice;
 
