@@ -32,8 +32,7 @@ public:
     int duration;
     void displayContent()
     {
-        cout << "Name: " << name << endl;
-        cout << "Duration: " << duration << " minutes" << endl;
+        cout << name << " course contain " << duration << " minutes duration" << endl;
     }
 };
 
@@ -44,8 +43,7 @@ public:
     int pages;
     void displayContent()
     {
-        cout << "Name: " << name << endl;
-        cout << "Pages: " << pages << endl;
+        cout << name << " course contain " << pages << " pages" << endl;
     }
 };
 
