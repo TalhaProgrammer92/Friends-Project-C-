@@ -12,6 +12,33 @@ const string BLUE = "\033[34m";    /* Blue */
 const string MAGENTA = "\033[35m"; /* Magenta */
 const string CYAN = "\033[36m";    /* Cyan */
 
+//? Setting
+struct Setting
+{
+    //? Player
+    struct PlayerColor
+    {
+        const string wonColor = GREEN;
+        const string signColor = YELLOW;
+        const string nameColor = CYAN;
+    };
+    
+    //? Board
+    struct BoardColor
+    {
+        const string borderColor = BLUE;
+    };
+
+    //? Game
+    struct GameColor
+    {
+        const string tieColor = MAGENTA;
+        const string turnColor = CYAN;
+        const string winColor = GREEN;
+    };
+};
+
+
 ////////////////////////////
 //? Functions (Prototypes)
 ////////////////////////////
@@ -43,11 +70,9 @@ public:
     }
     void display()
     {
-        printColor("Name:\t", CYAN);
-        printColor(name, YELLOW);
+        printColor(name, Setting::PlayerColor().nameColor);
         cout << endl;
-        printColor("Sign:\t", CYAN);
-        printColor(sign, YELLOW);
+        printColor(sign, Setting::PlayerColor().signColor);
         cout << endl;
     }
 };
@@ -58,7 +83,7 @@ public:
 ////////////////////////////
 int main()
 {
-    Player p("Talha Ahmad", 'T');
+    Player p("Talha Ahmad", 'X');
     p.display();
 }
 
