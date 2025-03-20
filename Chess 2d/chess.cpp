@@ -63,6 +63,37 @@ public:
 
     //* Display
     void display();
+
+    //* Equal overload
+    bool operator==(Position &position);
+};
+
+///////////////////
+//  CHESS PIECE  //
+///////////////////
+class ChessPiece {
+protected:
+    //* Variables
+    string unicode;
+
+public:
+    Position position;
+
+    //* Constructor
+    ChessPiece(Position position, string unicode) : position(position), unicode(unicode) {}
+
+    //* Getters
+    string getUnicode() { return unicode; }
+};
+
+////////////
+//  PAWN  //
+////////////
+class WhitePawn : public ChessPiece
+{
+public:
+    //* Constructor
+    WhitePawn(Position position) : ChessPiece(position, White::pawn) {}
 };
 
 /////////////
@@ -109,3 +140,8 @@ void Position::display()
 {
     cout << '(' << row << ", " << column << ')';
 }
+
+bool Position::operator==(Position &position)
+{
+    return row == position.row && column == position.column;
+} 
