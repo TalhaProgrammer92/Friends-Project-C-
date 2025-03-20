@@ -89,11 +89,31 @@ public:
 ////////////
 //  PAWN  //
 ////////////
-class WhitePawn : public ChessPiece
+class Pawn : public ChessPiece
 {
 public:
     //* Constructor
-    WhitePawn(Position position) : ChessPiece(position, White::pawn) {}
+    Pawn(Position position) : ChessPiece(position, "") {}
+};
+
+//////////////////
+//  WHITE PAWN  //
+//////////////////
+class WhitePawn : public Pawn
+{
+public:
+    //* Constructor
+    WhitePawn(Position position) : Pawn(position) { unicode = White::pawn; }
+};
+
+//////////////////
+//  BLACK PAWN  //
+//////////////////
+class BlackPawn : public Pawn
+{
+public:
+    //* Constructor
+    BlackPawn(Position position) : Pawn(position) { unicode = Black::pawn; }
 };
 
 /////////////
