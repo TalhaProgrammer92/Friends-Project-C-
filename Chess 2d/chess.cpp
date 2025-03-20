@@ -2,6 +2,21 @@
 
 using namespace std;
 
+//////////////////////
+// ANSI Color Codes //
+//////////////////////
+enum class FGColor {
+    Black = 30, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 39
+};
+
+enum class BGColor {
+    Black = 40, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 49
+};
+
+enum class TextStyle {
+    Reset = 0, Bold = 1, Dim = 2, Italic = 3, Underline = 4, Blink = 5, Reverse = 7, Hidden = 8
+};
+
 ///////////////
 //  Unicode  //
 ///////////////
@@ -116,6 +131,16 @@ public:
     BlackPawn(Position position) : Pawn(position) { unicode = Black::pawn; }
 };
 
+///////////////////
+// FUNCTION TO PRINT COLORS //
+///////////////////
+
+string setColor(FGColor fg = FGColor::Default, BGColor bg = BGColor::Default, TextStyle style = TextStyle::Reset) {
+    return "\033[" + to_string(static_cast<int>(style)) + ";" +
+           to_string(static_cast<int>(fg)) + ";" +
+           to_string(static_cast<int>(bg)) + "m";
+}
+
 /////////////
 //  MAIN   //
 /////////////
@@ -124,7 +149,7 @@ int main()
     // Set console code page to UTF-8
     // SetConsoleOutputCP(CP_UTF8);
 
-    cout << Black::king << ' ' << White::king << endl;
+    cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
 }
 
 //////////////
