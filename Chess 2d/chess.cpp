@@ -141,6 +141,21 @@ string setColor(FGColor fg = FGColor::Default, BGColor bg = BGColor::Default, Te
            to_string(static_cast<int>(bg)) + "m";
 }
 
+// Function to draw chess board - Sample
+void drawChessBoard() {
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            // Alternate colors (like real chess board)
+            BGColor bgColor = (row + col) % 2 == 0 ? BGColor::White : BGColor::Black;
+            FGColor fgColor = (row + col) % 2 == 0 ? FGColor::Black : FGColor::White;
+
+            // Print square
+            cout << setColor(fgColor, bgColor) << "  " << setColor();
+        }
+        cout << endl;
+    }
+}
+
 /////////////
 //  MAIN   //
 /////////////
@@ -149,7 +164,10 @@ int main()
     // Set console code page to UTF-8
     // SetConsoleOutputCP(CP_UTF8);
 
-    cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
+    // Draw chess board
+    drawChessBoard();
+
+    // cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
 }
 
 //////////////
