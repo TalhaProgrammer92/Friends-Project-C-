@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 
 using namespace std;
 
@@ -162,10 +163,15 @@ void drawChessBoard() {
 int main()
 {
     // Set console code page to UTF-8
-    // SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 
     // Draw chess board
-    drawChessBoard();
+    // drawChessBoard();
+
+    WhitePawn wp(Position(1, 1));
+    cout << wp.getUnicode() << endl;
+    wp.position.display();
+    cout << endl;
 
     // cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
 }
