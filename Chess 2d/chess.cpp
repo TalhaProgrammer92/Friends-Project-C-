@@ -6,21 +6,32 @@ using namespace std;
 //////////////////////
 // ANSI Color Codes //
 //////////////////////
+//? https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
+//* Forground colors
 enum class FGColor {
     Black = 30, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 39
 };
 
+//* Background colors
 enum class BGColor {
     Black = 40, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 49
 };
 
+//* Styles
 enum class TextStyle {
     Reset = 0, Bold = 1, Dim = 2, Italic = 3, Underline = 4, Blink = 5, Reverse = 7, Hidden = 8
 };
 
-///////////////
-//  Unicode  //
-///////////////
+//* Get color string function
+//! Works with FGColor, BGColor, and TextStyle enums
+//? Returns a string that can be used to set the color of text in the console
+string getColorString(FGColor fg = FGColor::Default, BGColor bg = BGColor::Default, TextStyle style = TextStyle::Reset) {
+    return "\033[" + to_string(static_cast<int>(style)) + ";" +
+           to_string(static_cast<int>(fg)) + ";" +
+           to_string(static_cast<int>(bg)) + "m";
+}
+
 class Black
 {
 public:
@@ -55,162 +66,41 @@ const string White::bishop = "\u265D";
 const string White::knight = "\u265E";
 const string White::pawn = "\u265F";
 
-//////////////
-// POSITION //
-//////////////
-class Position
-{
-private:
-    //* Variables
+////////////////////
+// POSITION CLASS //
+////////////////////
+class Position {
+public:
+    //* row and column of the position on the chessboard
     int row, column;
 
-public:
     //* Constructor
-    Position(int row = 0, int column = 0) : row(row), column(column) {}
+    Position(int r, int c) : row(r), column(c) {}
 
-    //* Getters and Setters
-    int getRow();
-    int getColumn();
-    void setRow(int row);
-    void setColumn(int column);
-
-    //* Set both
-    void setBoth(int row, int column);
-
-    //* Display
-    void display();
-
-    //* Equal overload
-    bool operator==(Position &position);
-};
-
-///////////////////
-//  CHESS PIECE  //
-///////////////////
-class ChessPiece {
-protected:
-    //* Variables
-    string unicode;
-
-public:
-    Position position;
-
-    //* Constructor
-    ChessPiece(Position position, string unicode) : position(position), unicode(unicode) {}
-
-    //* Getters
-    string getUnicode() { return unicode; }
-};
-
-////////////
-//  PAWN  //
-////////////
-class Pawn : public ChessPiece
-{
-public:
-    //* Constructor
-    Pawn(Position position) : ChessPiece(position, "") {}
-};
-
-//////////////////
-//  WHITE PAWN  //
-//////////////////
-class WhitePawn : public Pawn
-{
-public:
-    //* Constructor
-    WhitePawn(Position position) : Pawn(position) { unicode = White::pawn; }
-};
-
-//////////////////
-//  BLACK PAWN  //
-//////////////////
-class BlackPawn : public Pawn
-{
-public:
-    //* Constructor
-    BlackPawn(Position position) : Pawn(position) { unicode = Black::pawn; }
-};
-
-///////////////////
-// FUNCTION TO PRINT COLORS //
-///////////////////
-
-string setColor(FGColor fg = FGColor::Default, BGColor bg = BGColor::Default, TextStyle style = TextStyle::Reset) {
-    return "\033[" + to_string(static_cast<int>(style)) + ";" +
-           to_string(static_cast<int>(fg)) + ";" +
-           to_string(static_cast<int>(bg)) + "m";
-}
-
-// Function to draw chess board - Sample
-void drawChessBoard() {
-    for (int row = 0; row < 8; row++) {
-        for (int col = 0; col < 8; col++) {
-            // Alternate colors (like real chess board)
-            BGColor bgColor = (row + col) % 2 == 0 ? BGColor::White : BGColor::Black;
-            FGColor fgColor = (row + col) % 2 == 0 ? FGColor::Black : FGColor::White;
-
-            // Print square
-            cout << setColor(fgColor, bgColor) << "  " << setColor();
-        }
-        cout << endl;
+    //* Get the position as a string
+    string toString() const {
+        return "(" + to_string(row) + ", " + to_string(column) + ")";
     }
-}
+
+    //! The following function will be used to perform calculations with positions for movement validations
+    //* Subtract two positions - deal with absolute values
+    Position operator-(const Position& other) const {
+        return Position(abs(row - other.row), abs(column - other.column));
+    }
+};
+
 
 /////////////
 //  MAIN   //
 /////////////
 int main()
 {
-    // Set console code page to UTF-8
+    //! Set console code page to UTF-8
     SetConsoleOutputCP(CP_UTF8);
 
-    // Draw chess board
-    // drawChessBoard();
-
-    WhitePawn wp(Position(1, 1));
-    cout << wp.getUnicode() << endl;
-    wp.position.display();
-    cout << endl;
-
-    // cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
+    //* check position
+    Position p1(5, 3);
+    Position p2(3, 1);
+    Position p3 = p1 - p2;
+    cout << p3.toString() << endl; // (3, 4)
 }
-
-//////////////
-// POSITION //
-//////////////
-int Position::getRow()
-{
-    return row;
-}
-
-int Position::getColumn()
-{
-    return column;
-}
-
-void Position::setRow(int row)
-{
-    this->row = row;
-}
-
-void Position::setColumn(int column)
-{
-    this->column = column;
-}
-
-void Position::setBoth(int row, int column)
-{
-    this->row = row;
-    this->column = column;
-}
-
-void Position::display()
-{
-    cout << '(' << row << ", " << column << ')';
-}
-
-bool Position::operator==(Position &position)
-{
-    return row == position.row && column == position.column;
-} 
