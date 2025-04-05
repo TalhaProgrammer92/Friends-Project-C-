@@ -26,18 +26,16 @@ enum class WhitePiece
     pawn = 0x265F
 };
 
-//////////////
-// POSITION //
-//////////////
-class Position
-{
-private:
-    //* Variables
+////////////////////
+// POSITION CLASS //
+////////////////////
+class Position {
+public:
+    //* row and column of the position on the chessboard
     int row, column;
 
-public:
     //* Constructor
-    Position(int row = 0, int column = 0) : row(row), column(column) {}
+    Position(int r, int c) : row(r), column(c) {}
 
     //* Getters and Setters
     int getRow();
@@ -123,6 +121,7 @@ public:
 /////////////
 int main()
 {
+    //! Set console code page to UTF-8
     //! Set console code page to UTF-8
     SetConsoleOutputCP(CP_UTF8);
 
