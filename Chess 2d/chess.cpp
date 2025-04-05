@@ -204,7 +204,7 @@ Position Position::operator-(Position &position)
 ///////////////////
 
 //* Constructor
-ChessPiece::ChessPiece(Position position) : position(position), isAlive(true) {}
+ChessPiece::ChessPiece(Position position) : position(position), alive(true) {}
 
 //* Getters and Setters
 
