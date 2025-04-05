@@ -4,56 +4,27 @@
 using namespace std;
 
 //////////////////////
-// ANSI Color Codes //
+//  Unicode Pieces  //
 //////////////////////
-enum class FGColor {
-    Black = 30, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 39
-};
-
-enum class BGColor {
-    Black = 40, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 49
-};
-
-enum class TextStyle {
-    Reset = 0, Bold = 1, Dim = 2, Italic = 3, Underline = 4, Blink = 5, Reverse = 7, Hidden = 8
-};
-
-///////////////
-//  Unicode  //
-///////////////
-class Black
+enum class BlackPiece
 {
-public:
-    static const string king;
-    static const string queen;
-    static const string rook;
-    static const string bishop;
-    static const string knight;
-    static const string pawn;
+    king = 0x2654,
+    queen = 0x2655,
+    rook = 0x2656,
+    bishop = 0x2657,
+    knight = 0x2658,
+    pawn = 0x2659
 };
-const string Black::king = "\u2654";
-const string Black::queen = "\u2655";
-const string Black::rook = "\u2656";
-const string Black::bishop = "\u2657";
-const string Black::knight = "\u2658";
-const string Black::pawn = "\u2659";
 
-class White
+enum class WhitePiece
 {
-public:
-    static const string king;
-    static const string queen;
-    static const string rook;
-    static const string bishop;
-    static const string knight;
-    static const string pawn;
+    king = 0x265A,
+    queen = 0x265B,
+    rook = 0x265C,
+    bishop = 0x265D,
+    knight = 0x265E,
+    pawn = 0x265F
 };
-const string White::king = "\u265A";
-const string White::queen = "\u265B";
-const string White::rook = "\u265C";
-const string White::bishop = "\u265D";
-const string White::knight = "\u265E";
-const string White::pawn = "\u265F";
 
 //////////////
 // POSITION //
@@ -82,103 +53,87 @@ public:
 
     //* Equal overload
     bool operator==(Position &position);
+
+    //* Not equal overload
+    bool operator!=(Position &position);
+
+    //* Subtract overload
+    Position operator-(Position &position);
 };
 
 ///////////////////
 //  CHESS PIECE  //
 ///////////////////
-class ChessPiece {
+class ChessPiece
+{
 protected:
-    //* Variables
-    string unicode;
+    //! To check if the piece is alive
+    bool alive;
 
 public:
+    //* Attributes
+
+    /*
+     ! To track the piece's position
+     ? Format: (row, column)
+    */
     Position position;
 
     //* Constructor
-    ChessPiece(Position position, string unicode) : position(position), unicode(unicode) {}
+    ChessPiece(Position position);
 
-    //* Getters
-    string getUnicode() { return unicode; }
+    //* Getters and Setters
+    bool isAlive();
+    void kill();
+
+    //* Estimate the distance between two positions
+    Position estimateDistance(Position destination);
 };
 
-////////////
-//  PAWN  //
-////////////
-class Pawn : public ChessPiece
+/////////////////////////
+//  WHITE CHESS PIECE  //
+/////////////////////////
+class WhiteChessPiece : public ChessPiece
 {
+protected:
+    //* Attributes
+    WhitePiece piece;
+
 public:
     //* Constructor
-    Pawn(Position position) : ChessPiece(position, "") {}
+    WhiteChessPiece(Position position, WhitePiece piece);
 };
 
-//////////////////
-//  WHITE PAWN  //
-//////////////////
-class WhitePawn : public Pawn
+/////////////////////////
+//  BLACK CHESS PIECE  //
+/////////////////////////
+class BlackChessPiece : public ChessPiece
 {
+protected:
+    //* Attributes
+    BlackPiece piece;
+
 public:
     //* Constructor
-    WhitePawn(Position position) : Pawn(position) { unicode = White::pawn; }
+    BlackChessPiece(Position position, BlackPiece piece);
 };
-
-//////////////////
-//  BLACK PAWN  //
-//////////////////
-class BlackPawn : public Pawn
-{
-public:
-    //* Constructor
-    BlackPawn(Position position) : Pawn(position) { unicode = Black::pawn; }
-};
-
-///////////////////
-// FUNCTION TO PRINT COLORS //
-///////////////////
-
-string setColor(FGColor fg = FGColor::Default, BGColor bg = BGColor::Default, TextStyle style = TextStyle::Reset) {
-    return "\033[" + to_string(static_cast<int>(style)) + ";" +
-           to_string(static_cast<int>(fg)) + ";" +
-           to_string(static_cast<int>(bg)) + "m";
-}
-
-// Function to draw chess board - Sample
-void drawChessBoard() {
-    for (int row = 0; row < 8; row++) {
-        for (int col = 0; col < 8; col++) {
-            // Alternate colors (like real chess board)
-            BGColor bgColor = (row + col) % 2 == 0 ? BGColor::White : BGColor::Black;
-            FGColor fgColor = (row + col) % 2 == 0 ? FGColor::Black : FGColor::White;
-
-            // Print square
-            cout << setColor(fgColor, bgColor) << "  " << setColor();
-        }
-        cout << endl;
-    }
-}
 
 /////////////
 //  MAIN   //
 /////////////
 int main()
 {
-    // Set console code page to UTF-8
+    //! Set console code page to UTF-8
     SetConsoleOutputCP(CP_UTF8);
 
-    // Draw chess board
-    // drawChessBoard();
-
-    WhitePawn wp(Position(1, 1));
-    cout << wp.getUnicode() << endl;
-    wp.position.display();
-    cout << endl;
-
-    // cout << setColor(FGColor::Green, BGColor::White) << White::king << setColor() << endl;
+    return 0;
 }
 
 //////////////
 // POSITION //
 //////////////
+
+//* Getters and Setters
 int Position::getRow()
 {
     return row;
@@ -191,26 +146,106 @@ int Position::getColumn()
 
 void Position::setRow(int row)
 {
-    this->row = row;
+    //! In range
+    if (row >= 0 && row <= 7)
+        this->row = row;
+
+    //! Out of range (throw exception)
+    else
+        throw out_of_range("Row is out of range (0-7)");
 }
 
 void Position::setColumn(int column)
 {
-    this->column = column;
+    //! In range
+    if (column >= 0 && column <= 7)
+        this->column = column;
+
+    //! Out of range (throw exception)
+    else
+        throw out_of_range("Column is out of range (0-7)");
 }
 
 void Position::setBoth(int row, int column)
 {
-    this->row = row;
-    this->column = column;
+    //! Set both
+    this->setRow(row);
+    this->setColumn(column);
 }
 
+/*
+ * Display the position
+ ? Format: (row, column)
+ */
 void Position::display()
 {
     cout << '(' << row << ", " << column << ')';
 }
 
+//* Equal overload
 bool Position::operator==(Position &position)
 {
     return row == position.row && column == position.column;
-} 
+}
+
+//* Not equal overload
+bool Position::operator!=(Position &position)
+{
+    return row != position.row || column != position.column;
+}
+
+//* Subtract overload
+Position Position::operator-(Position &position)
+{
+    return Position(abs(row - position.row), abs(column - position.column));
+}
+
+///////////////////
+//  CHESS PIECE  //
+///////////////////
+
+//* Constructor
+ChessPiece::ChessPiece(Position position) : position(position), isAlive(true) {}
+
+//* Getters and Setters
+
+//? Check if the piece is alive
+bool ChessPiece::isAlive()
+{
+    return alive;
+}
+
+//? Kill the piece
+void ChessPiece::kill()
+{
+    alive = false;
+}
+
+/*
+ * Estimate the distance between two positions
+ ? Format: (row, column)
+ */
+Position ChessPiece::estimateDistance(Position destination)
+{
+    return this->position - destination;
+}
+
+/////////////////////////
+//  WHITE CHESS PIECE  //
+/////////////////////////
+
+//* Constructor
+WhiteChessPiece::WhiteChessPiece(Position position, WhitePiece piece) : ChessPiece(position)
+{
+    this->piece = piece;
+}
+
+/////////////////////////
+//  BLACK CHESS PIECE  //
+/////////////////////////
+
+//* Constructor
+BlackChessPiece::BlackChessPiece(Position position, BlackPiece piece) : ChessPiece(position)
+{
+    this->piece = piece;
+}
