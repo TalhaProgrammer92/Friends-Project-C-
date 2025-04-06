@@ -1,55 +1,35 @@
 #include <iostream>
-#include <string>
-
-#ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
-#endif
 
 using namespace std;
 
-//////////////////
-// CHESS PIECES //
-//////////////////
-namespace ChessPieces
-{
-    const string WhiteKing = "♔";
-    const string WhiteQueen = "♕";
-    const string WhiteRook = "♖";
-    const string WhiteBishop = "♗";
-    const string WhiteKnight = "♘";
-    const string WhitePawn = "♙";
+//////////////////////////
+// UNICODE CHESS PIECES //
+//////////////////////////
+#define WHITE_KING   L"\u2654"
+#define WHITE_QUEEN  L"\u2655"
+#define WHITE_ROOK   L"\u2656"
+#define WHITE_BISHOP L"\u2657"
+#define WHITE_KNIGHT L"\u2658"
+#define WHITE_PAWN   L"\u2659"
 
-    const string BlackKing = "♚";
-    const string BlackQueen = "♛";
-    const string BlackRook = "♜";
-    const string BlackBishop = "♝";
-    const string BlackKnight = "♞";
-    const string BlackPawn = "♟";
-}
+#define BLACK_KING   L"\u265A"
+#define BLACK_QUEEN  L"\u265B"
+#define BLACK_ROOK   L"\u265C"
+#define BLACK_BISHOP L"\u265D"
+#define BLACK_KNIGHT L"\u265E"
+#define BLACK_PAWN   L"\u265F"
 
-//* Setup Unicode Console
-void setup_unicode_console();
+#define FILLED_CIRCLE  L"\u25CF"
+#define HOLLOW_CIRCLE  L"\u25CB"
 
-///////////////////
-// MAIN FUNCTION //
-///////////////////
+//* const wchar_t* white_rook = WHITE_ROOK;
+
 int main()
 {
-    //? Setup Unicode Console
-    setup_unicode_console();
+    //! Set console to Unicode mode
+    _setmode(_fileno(stdout), _O_U16TEXT);
 
-    wcout << "King: " << ChessPieces::WhiteKing << endl;
-}
-
-//* Setup Unicode Console
-void setup_unicode_console()
-{
-
-#ifdef _WIN32
-    _setmode(_fileno(stdout), _O_U16TEXT); //! Windows: UTF-16
-    // std::wcout << L"♔ White King\n";       //! Wide-string (UTF-16)
-#else
-    // std::cout << u8"♔ White King\n"; //! UTF-8 (Linux/macOS)
-#endif
+    return 0;
 }
