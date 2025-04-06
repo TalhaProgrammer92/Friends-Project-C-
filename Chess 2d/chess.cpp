@@ -25,6 +25,7 @@ using namespace std;
 #define HOLLOW_CIRCLE  L"\u25CB"
 
 //* const wchar_t* white_rook = WHITE_ROOK;
+//* wcout << white_rook << endl;
 
 int main()
 {
