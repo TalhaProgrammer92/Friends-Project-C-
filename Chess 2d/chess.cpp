@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <windows.h>
 
 using namespace std;
@@ -68,6 +69,9 @@ protected:
     //! To check if the piece is alive
     bool alive;
 
+    //! Fixed-size array for valid positions
+    vector<Position> valid;
+
 public:
     //* Attributes
 
@@ -116,12 +120,50 @@ public:
     BlackChessPiece(Position position, BlackPiece piece);
 };
 
+//////////////////
+//  PAWN PIECE  //
+//////////////////
+class PawnPiece : public ChessPiece
+{
+private:
+    //* Attributes
+    int moves;          //! Number of moves made by the pawn
+    bool firstMove;     //! Check if the pawn is on its first move
+
+public:
+    //* Constructor
+    PawnPiece(Position position);
+
+    //* Getters and Setters
+    int getMoves();
+    bool isFirstMove();
+
+    //* Setters
+    void incrementMoves();
+
+    //* Destructor
+    ~PawnPiece();
+};
+
+////////////////////////
+//  WHITE PAWN PIECE  //
+////////////////////////
+class WhitePawnPiece : public PawnPiece
+{
+private:
+    //* Attributes
+    WhitePiece piece = WhitePiece::pawn; //! Piece type
+public:
+    //* Constructor
+    WhitePawnPiece(Position position) : PawnPiece(position) {}
+
+};
+
 /////////////
 //  MAIN   //
 /////////////
 int main()
 {
-    //! Set console code page to UTF-8
     //! Set console code page to UTF-8
     SetConsoleOutputCP(CP_UTF8);
 
@@ -247,4 +289,46 @@ WhiteChessPiece::WhiteChessPiece(Position position, WhitePiece piece) : ChessPie
 BlackChessPiece::BlackChessPiece(Position position, BlackPiece piece) : ChessPiece(position)
 {
     this->piece = piece;
+}
+
+//////////////////
+//  PAWN PIECE  //
+//////////////////
+
+//* Constructor
+PawnPiece::PawnPiece(Position position) : ChessPiece(position)
+{
+    //? Set the pawn to be alive
+    moves = 0;
+    firstMove = true;
+
+    //? Set valid positions for the pawn to move
+    valid.push_back(Position(1, 0));    //! First move (1 box)
+    valid.push_back(Position(2, 0));    //! First move (2 boxes)
+    valid.push_back(Position(1, 1));    //! Diagonal move
+}
+
+//* Getters and Setters
+int PawnPiece::getMoves()
+{
+    return moves;
+}
+
+bool PawnPiece::isFirstMove()
+{
+    return firstMove;
+}
+
+//* Setters
+void PawnPiece::incrementMoves()
+{
+    moves++;
+    firstMove = false;
+}
+
+//* Destructor
+PawnPiece::~PawnPiece()
+{
+    valid.clear();
+    valid.shrink_to_fit();
 }
