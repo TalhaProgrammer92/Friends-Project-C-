@@ -1,8 +1,5 @@
-#include <iostream>
-
-using namespace std;
-
 /*
+! Normal Example
 // Unicode Chess Piece Macros
 #define WHITE_KING   L"\u2654"
 #define WHITE_QUEEN  L"\u2655"
@@ -127,7 +124,7 @@ int main() {
 }
 
 Notes:
-1. The _setmode and _O_U16TEXT are Windows-specific. For Linux/macOS, you might need different setup.
+1. The _setmode and _O_U16TEXT are Windows-specific. For Linux/macOS, you might need different setup. Just like cross-platform example above.
 
 2. For cross-platform compatibility, you might want to wrap the console setup in platform-specific code.
 
@@ -137,8 +134,3 @@ Notes:
 
 5. For C++20 and later, you could also use char8_t and UTF-8 string literals.
 */
-
-int main()
-{
-    
-}
