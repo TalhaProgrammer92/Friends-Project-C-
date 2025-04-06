@@ -123,7 +123,34 @@ int main() {
     return 0;
 }
 
-Notes:
+! Piece repsentation wrapper (ChatGPT)
+enum class Piece {
+    WhiteKing, WhiteQueen, WhiteRook, WhiteBishop, WhiteKnight, WhitePawn,
+    BlackKing, BlackQueen, BlackRook, BlackBishop, BlackKnight, BlackPawn,
+    Empty
+};
+
+std::string getUnicode(Piece piece) {
+    using namespace ChessPieces;
+    switch (piece) {
+        case Piece::WhiteKing: return WhiteKing;
+        case Piece::WhiteQueen: return WhiteQueen;
+        case Piece::WhiteRook: return WhiteRook;
+        case Piece::WhiteBishop: return WhiteBishop;
+        case Piece::WhiteKnight: return WhiteKnight;
+        case Piece::WhitePawn: return WhitePawn;
+        case Piece::BlackKing: return BlackKing;
+        case Piece::BlackQueen: return BlackQueen;
+        case Piece::BlackRook: return BlackRook;
+        case Piece::BlackBishop: return BlackBishop;
+        case Piece::BlackKnight: return BlackKnight;
+        case Piece::BlackPawn: return BlackPawn;
+        default: return " ";
+    }
+}
+
+
+! Notes:
 1. The _setmode and _O_U16TEXT are Windows-specific. For Linux/macOS, you might need different setup. Just like cross-platform example above.
 
 2. For cross-platform compatibility, you might want to wrap the console setup in platform-specific code.
