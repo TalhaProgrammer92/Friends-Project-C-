@@ -173,30 +173,7 @@ void Board::clear()
         for (int j = 0; j < 8; j++)
         {
             //? Initialize the mepty boxes
-
-            //! Even row
-            if (i % 2 == 0)
-            {
-                //! Even column
-                if (j % 2 == 0)
-                    boxes[i][j] = Symbol(HOLLOW_CIRCLE);
-
-                //! Odd column
-                else
-                    boxes[i][j] = Symbol(FILLED_CIRCLE);
-            }
-
-            //! Odd row
-            else
-            {
-                //! Even column
-                if (j % 2 == 0)
-                    boxes[i][j] = Symbol(FILLED_CIRCLE);
-
-                //! Odd column
-                else
-                    boxes[i][j] = Symbol(HOLLOW_CIRCLE);
-            }
+            boxes[i][j] = getEmptyBoxSymbol(i, j);
         }
     }
 }
@@ -229,4 +206,12 @@ void setUnicodeMode()
 
     //! To display Unicode characters in the console (error output)
     _setmode(_fileno(stderr), _O_U16TEXT);
+}
+
+//* Get appropriate empty box symbol based on position
+Symbol getEmptyBoxSymbol(int i, int j)
+{
+    if ((i + j) % 2 == 0)
+        return Symbol(HOLLOW_CIRCLE);
+    return Symbol(FILLED_CIRCLE);
 }
