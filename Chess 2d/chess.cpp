@@ -11,19 +11,19 @@ using namespace std;
 //////////////////////////
 
 //! Important for rendering chess pieces in the console
-#define WHITE_KING L"\u2654"    //? ♔
-#define WHITE_QUEEN L"\u2655"   //? ♕
-#define WHITE_ROOK L"\u2656"    //? ♖
-#define WHITE_BISHOP L"\u2657"  //? ♗
-#define WHITE_KNIGHT L"\u2658"  //? ♘
-#define WHITE_PAWN L"\u2659"    //? ♙
+#define WHITE_KING L"\u2654"   //? ♔
+#define WHITE_QUEEN L"\u2655"  //? ♕
+#define WHITE_ROOK L"\u2656"   //? ♖
+#define WHITE_BISHOP L"\u2657" //? ♗
+#define WHITE_KNIGHT L"\u2658" //? ♘
+#define WHITE_PAWN L"\u2659"   //? ♙
 
-#define BLACK_KING L"\u265A"    //? ♚
-#define BLACK_QUEEN L"\u265B"   //? ♛
-#define BLACK_ROOK L"\u265C"    //? ♜
-#define BLACK_BISHOP L"\u265D"  //? ♝
-#define BLACK_KNIGHT L"\u265E"  //? ♞
-#define BLACK_PAWN L"\u265F"    //? ♟
+#define BLACK_KING L"\u265A"   //? ♚
+#define BLACK_QUEEN L"\u265B"  //? ♛
+#define BLACK_ROOK L"\u265C"   //? ♜
+#define BLACK_BISHOP L"\u265D" //? ♝
+#define BLACK_KNIGHT L"\u265E" //? ♞
+#define BLACK_PAWN L"\u265F"   //? ♟
 
 #define FILLED_CIRCLE L'\u25CF' //? ●
 #define HOLLOW_CIRCLE L'\u25CB' //? ○
@@ -38,18 +38,19 @@ using namespace std;
 ////////////////////
 // Position class //
 ////////////////////
-class Position{
+class Position
+{
 public:
     int row, column;
 
     //* Constructors
-    Position() {} //! Default constructor
+    Position() {}           //! Default constructor
     Position(int r, int c); //! Constructor with row and column (parameters)
 
     //* Overloaded operator for comparison
-    bool operator==(const Position& other) const;
-    bool operator!=(const Position& other) const;
-    Position operator-(const Position& other) const;
+    bool operator==(const Position &other) const;
+    bool operator!=(const Position &other) const;
+    Position operator-(const Position &other) const;
 };
 
 //////////////////
@@ -66,6 +67,35 @@ public:
     Symbol(wchar_t item); //! Constructor with item (parameter)
 
     //* Display the box with the item
+    void display();
+};
+
+///////////////////////
+// Chess Piece Class //
+///////////////////////
+class ChessPiece
+{
+protected:
+    Position position; //! Position of the chess piece
+    Symbol symbol;     //! Symbol of the chess piece
+
+public:
+    //* Constructor
+    ChessPiece() {} //! Default constructor
+
+    //* Constructor with position and symbol (parameters)
+    ChessPiece(Position pos, Symbol sym);
+
+    //* Get the position of the chess piece
+    Position getPosition();
+
+    //* Get the symbol of the chess piece
+    Symbol getSymbol();
+
+    //* Get displacement of the chess piece
+    Position getDisplacement(Position destinaiton);
+
+    //* Display the chess piece
     void display();
 };
 
@@ -116,14 +146,13 @@ int main()
 
     //* Dislpay chess pieces
     wcout << endl;
-    
+
     wcout << WHITE_KING << " " << WHITE_QUEEN << " " << WHITE_ROOK << " " << WHITE_BISHOP << " " << WHITE_KNIGHT << " " << WHITE_PAWN << endl;
-    
+
     wcout << BLACK_KING << " " << BLACK_QUEEN << " " << BLACK_ROOK << " " << BLACK_BISHOP << " " << BLACK_KNIGHT << " " << BLACK_PAWN << endl;
 
     return 0;
 }
-
 
 ////////////////////
 // Position class //
@@ -133,17 +162,17 @@ int main()
 Position::Position(int r, int c) : row(r), column(c) {}
 
 //* Overloaded operator for comparison
-bool Position::operator==(const Position& other) const
+bool Position::operator==(const Position &other) const
 {
     return (row == other.row && column == other.column);
 }
 
-bool Position::operator!=(const Position& other) const
+bool Position::operator!=(const Position &other) const
 {
     return !(*this == other);
 }
 
-Position Position::operator-(const Position& other) const
+Position Position::operator-(const Position &other) const
 {
     return Position(abs(row - other.row), abs(column - other.column));
 }
@@ -159,6 +188,37 @@ Symbol::Symbol(wchar_t item) : unicode(item) {}
 void Symbol::display()
 {
     wcout << unicode;
+}
+
+///////////////////////
+// Chess Piece Class //
+///////////////////////
+
+//* Constructor with position and symbol (parameters)
+ChessPiece::ChessPiece(Position pos, Symbol sym) : position(pos), symbol(sym) {}
+
+//* Get the position of the chess piece
+Position ChessPiece::getPosition()
+{
+    return position;
+}
+
+//* Get the symbol of the chess piece
+Symbol ChessPiece::getSymbol()
+{
+    return symbol;
+}
+
+//* Get displacement of the chess piece
+Position ChessPiece::getDisplacement(Position destination)
+{
+    return position - destination;
+}
+
+//* Display the chess piece
+void ChessPiece::display()
+{
+    wcout << symbol.unicode;
 }
 
 /////////////////
@@ -217,13 +277,13 @@ void setUnicodeMode()
 //* Clear the console (cross-platform)
 void clearConsole()
 {
-    //! Windows OS
-    #ifdef _WIN32
-        system("cls");
-    //! Linux/Unix OS
-    #else
-        system("clear");
-    #endif
+//! Windows OS
+#ifdef _WIN32
+    system("cls");
+//! Linux/Unix OS
+#else
+    system("clear");
+#endif
 }
 
 //* Get appropriate empty box symbol based on position
