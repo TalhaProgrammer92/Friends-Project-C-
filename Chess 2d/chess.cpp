@@ -35,18 +35,35 @@ using namespace std;
  ? wcout << white_rook << endl;
 */
 
-///////////////
-// Box Class //
-///////////////
-class Box
+////////////////////
+// Position class //
+////////////////////
+class Position{
+public:
+    int row, column;
+
+    //* Constructors
+    Position() {} //! Default constructor
+    Position(int r, int c); //! Constructor with row and column (parameters)
+
+    //* Overloaded operator for comparison
+    bool operator==(const Position& other) const;
+    bool operator!=(const Position& other) const;
+    Position operator-(const Position& other) const;
+};
+
+//////////////////
+// Symbol Class //
+//////////////////
+class Symbol
 {
 public:
-    //* Item is a chess piece or a circle
-    wchar_t item;
+    //* Unicode of a chess piece or a circle
+    wchar_t unicode;
 
     //* Constructor
-    Box() {}           //! Default constructor
-    Box(wchar_t item); //! Constructor with item (parameter)
+    Symbol() {}           //! Default constructor
+    Symbol(wchar_t item); //! Constructor with item (parameter)
 
     //* Display the box with the item
     void display();
@@ -59,7 +76,7 @@ class Board
 {
 public:
     //* 8x8 array of boxes
-    Box boxes[8][8];
+    Symbol boxes[8][8];
 
     //* Constructor
     Board();
@@ -76,6 +93,9 @@ public:
 ///////////////
 //* Set console to Unicode mode
 void setUnicodeMode();
+
+//* Get appropriate empty box symbol based on position
+Symbol getEmptyBoxSymbol(int i, int j);
 
 /////////////////
 // Entry Point //
@@ -98,17 +118,41 @@ int main()
     return 0;
 }
 
-///////////////
-// Box Class //
-///////////////
+
+////////////////////
+// Position class //
+////////////////////
+
+//* Constructor with row and column (parameters)
+Position::Position(int r, int c) : row(r), column(c) {}
+
+//* Overloaded operator for comparison
+bool Position::operator==(const Position& other) const
+{
+    return (row == other.row && column == other.column);
+}
+
+bool Position::operator!=(const Position& other) const
+{
+    return !(*this == other);
+}
+
+Position Position::operator-(const Position& other) const
+{
+    return Position(abs(row - other.row), abs(column - other.column));
+}
+
+//////////////////
+// Symbol Class //
+//////////////////
 
 //* Constructor
-Box::Box(wchar_t item) : item(item) {}
+Symbol::Symbol(wchar_t item) : unicode(item) {}
 
 //* Display the box with the item
-void Box::display()
+void Symbol::display()
 {
-    wcout << item;
+    wcout << unicode;
 }
 
 /////////////////
@@ -135,11 +179,11 @@ void Board::clear()
             {
                 //! Even column
                 if (j % 2 == 0)
-                    boxes[i][j] = Box(HOLLOW_CIRCLE);
+                    boxes[i][j] = Symbol(HOLLOW_CIRCLE);
 
                 //! Odd column
                 else
-                    boxes[i][j] = Box(FILLED_CIRCLE);
+                    boxes[i][j] = Symbol(FILLED_CIRCLE);
             }
 
             //! Odd row
@@ -147,11 +191,11 @@ void Board::clear()
             {
                 //! Even column
                 if (j % 2 == 0)
-                    boxes[i][j] = Box(FILLED_CIRCLE);
+                    boxes[i][j] = Symbol(FILLED_CIRCLE);
 
                 //! Odd column
                 else
-                    boxes[i][j] = Box(HOLLOW_CIRCLE);
+                    boxes[i][j] = Symbol(HOLLOW_CIRCLE);
             }
         }
     }
