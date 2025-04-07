@@ -95,7 +95,7 @@ public:
 void setUnicodeMode();
 
 //* Get appropriate empty box symbol based on position
-Symbol getEmptyBoxSymbol(int i, int j);
+Symbol getEmptyBoxSymbol(Position position);
 
 /////////////////
 // Entry Point //
@@ -173,7 +173,7 @@ void Board::clear()
         for (int j = 0; j < 8; j++)
         {
             //? Initialize the mepty boxes
-            boxes[i][j] = getEmptyBoxSymbol(i, j);
+            boxes[i][j] = getEmptyBoxSymbol(Position(i, j));
         }
     }
 }
@@ -209,8 +209,11 @@ void setUnicodeMode()
 }
 
 //* Get appropriate empty box symbol based on position
-Symbol getEmptyBoxSymbol(int i, int j)
+Symbol getEmptyBoxSymbol(Position position)
 {
+    int i = position.row;
+    int j = position.column;
+
     if ((i + j) % 2 == 0)
         return Symbol(HOLLOW_CIRCLE);
     return Symbol(FILLED_CIRCLE);
