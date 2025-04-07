@@ -94,6 +94,9 @@ public:
 //* Set console to Unicode mode
 void setUnicodeMode();
 
+//* Clear the console
+void clearConsole();
+
 //* Get appropriate empty box symbol based on position
 Symbol getEmptyBoxSymbol(Position position);
 
@@ -104,6 +107,9 @@ int main()
 {
     //* Set console to Unicode mode
     setUnicodeMode();
+
+    //* Clear the console
+    clearConsole();
 
     Board board;     //! Create a board object
     board.display(); //! Clear the board
@@ -206,6 +212,18 @@ void setUnicodeMode()
 
     //! To display Unicode characters in the console (error output)
     _setmode(_fileno(stderr), _O_U16TEXT);
+}
+
+//* Clear the console (cross-platform)
+void clearConsole()
+{
+    //! Windows OS
+    #ifdef _WIN32
+        system("cls");
+    //! Linux/Unix OS
+    #else
+        system("clear");
+    #endif
 }
 
 //* Get appropriate empty box symbol based on position
