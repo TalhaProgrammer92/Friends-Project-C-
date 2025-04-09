@@ -165,7 +165,7 @@ private:
         Position(6, 7)};
 
 public:
-    //* Constructor with position and symbol (parameters)
+    //* Constructor
     WhitePawn(Position pos) : Pawn(pos) {}
 
     //* Check if the move is valid
@@ -189,11 +189,28 @@ private:
         Position(1, 7)};
 
 public:
-    //* Constructor with position and symbol (parameters)
+    //* Constructor
     BlackPawn(Position pos) : Pawn(pos) {}
 
     //* Check if the move is valid
     bool isValidMove(Position destination, Board &board) override;
+};
+
+//////////////////
+// Bishop class //
+//////////////////
+class Bishop : public ChessPiece
+{
+private:
+    //* Get path positions of the bishop
+    vector<Position> getPathPositions(Position destination);
+
+public:
+    //* Constructor
+    Bishop(Position pos) : ChessPiece(pos) {}
+
+    //* Check if the move is valid
+    bool isValidMove(Position destination, Board &board);
 };
 
 ///////////////
@@ -378,7 +395,7 @@ bool Pawn::checkMoveValidity(Position destination, vector<Position> initial_posi
     }
 
     //* Check if the pawn is capturing a piece diagonally
-    else if (displacement == valid_displament[2] && (board.getBox(destination) != Symbol(HOLLOW_CIRCLE) || board.getBox(destination) != Symbol(FILLED_CIRCLE))) //? (1, 1)
+    else if (displacement == valid_displament[2] && board.getBox(destination) != Symbol(HOLLOW_CIRCLE) && board.getBox(destination) != Symbol(FILLED_CIRCLE)) //? (1, 1)
     {
         return true; //! Diagonal capture move
     }
@@ -417,6 +434,52 @@ bool BlackPawn::isValidMove(Position destination, Board &board)
     }
 
     return false;
+}
+
+
+//////////////////
+// Bishop class //
+//////////////////
+
+//* Get path positions of the bishop
+vector<Position> Bishop::getPathPositions(Position destination)
+{
+    vector<Position> path_positions; //! Path positions of the bishop
+
+    Position displacement = getDisplacement(destination); //! Get the displacement of the bishop
+
+    int row_step = (displacement.row > 0) ? 1 : -1; //! Step in the row direction
+    int column_step = (displacement.column > 0) ? 1 : -1; //! Step in the column direction
+
+    for (int i = 1; i < displacement.row; i++)
+    {
+        path_positions.push_back(Position(position.row + i * row_step, position.column + i * column_step)); //! Add the path positions to the vector
+    }
+
+    return path_positions;
+}
+
+//* Check if the move is valid
+bool Bishop::isValidMove(Position destination, Board &board)
+{
+    Position displacement = getDisplacement(destination); //! Get the displacement of the bishop
+
+    //! Check if the bishop is moving diagonally
+    if (displacement.row == displacement.column)
+    {
+        //! Get the path positions of the bishop
+        for (auto &&pos : getPathPositions(destination))
+        {
+            //! Check if the path is clear
+            if (board.getBox(pos) != Symbol(HOLLOW_CIRCLE) && board.getBox(pos) != Symbol(FILLED_CIRCLE))
+            {
+                return false; //! Not a valid move
+            }
+        }
+        return true; //! Valid move
+    }
+
+    return false; //! Not a valid move
 }
 
 ///////////////
