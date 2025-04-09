@@ -397,7 +397,7 @@ bool WhitePawn::isValidMove(Position destination, Board &board)
     //! Check if the pawn is not moving backward
     if (position.row > destination.row)
     {
-        checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
+        return checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
     }
 
     return false;
@@ -413,7 +413,7 @@ bool BlackPawn::isValidMove(Position destination, Board &board)
     //! Check if the pawn is not moving backward
     if (position.row < destination.row)
     {
-        checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
+        return checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
     }
 
     return false;
