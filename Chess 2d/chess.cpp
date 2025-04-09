@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 //! To display Unicode characters in the console
 #include <io.h>
@@ -68,6 +69,12 @@ public:
 
     //* Display the box with the item
     void display();
+
+    //* Override == operator
+    bool operator==(const Symbol &other) const;
+
+    //* Override != operator
+    bool operator!=(const Symbol &other) const;
 };
 
 ///////////////////////
@@ -76,27 +83,20 @@ public:
 class ChessPiece
 {
 protected:
-    Position position; //! Position of the chess piece
-    Symbol symbol;     //! Symbol of the chess piece
+    Position position; //! Position & destination of the chess piece
 
 public:
     //* Constructor
     ChessPiece() {} //! Default constructor
 
     //* Constructor with position and symbol (parameters)
-    ChessPiece(Position pos, Symbol sym);
+    ChessPiece(Position pos);
 
     //* Get the position of the chess piece
     Position getPosition();
 
-    //* Get the symbol of the chess piece
-    Symbol getSymbol();
-
     //* Get displacement of the chess piece
     Position getDisplacement(Position destinaiton);
-
-    //* Display the chess piece
-    void display();
 };
 
 /////////////////
@@ -104,18 +104,72 @@ public:
 /////////////////
 class Board
 {
-public:
     //* 8x8 array of boxes
     Symbol boxes[8][8];
 
+public:
     //* Constructor
     Board();
 
     //* Clear/Reset the board
     void clear();
 
+    //* Get the box at a specific position
+    Symbol getBox(Position position);
+
+    //* Set the box at a specific position
+    void setBox(Position position, Symbol symbol);
+
     //* Display the board
     void display();
+};
+
+////////////////
+// Pawn Class //
+////////////////
+class Pawn : public ChessPiece
+{
+protected:
+    //! Possible displacement moves of the pawn
+    vector<Position> valid_displament = {
+        Position(1, 0), //? Forward move
+        Position(2, 0), //? Double forward move, only on the initial displacement move
+        Position(1, 1)  //? Diagonal capture move
+    };
+
+    //* Check valdity of the move
+    bool checkMoveValidity(Position destination, vector<Position> initial_positions, Board &board);
+
+public:
+    //* Constructor with position and symbol (parameters)
+    Pawn(Position pos) : ChessPiece(pos) {}
+
+    //* Check if the move is valid
+    virtual bool isValidMove(Position displacement, Board &board) = 0; //! Pure virtual function
+};
+
+//////////////////////
+// White Pawn class //
+//////////////////////
+class WhitePawn : public Pawn
+{
+private:
+    vector<Position> initial_positions = {
+        Position(6, 0), //? Initial position of the white pawn
+        Position(6, 1),
+        Position(6, 2),
+        Position(6, 3),
+        Position(6, 4),
+        Position(6, 5),
+        Position(6, 6),
+        Position(6, 7)};
+
+public:
+    //* Constructor with position and symbol (parameters)
+    WhitePawn(Position pos) : Pawn(pos) {}
+
+    //* Check if the move is valid
+    bool isValidMove(Position destination, Board &board) override;
 };
 
 ///////////////
@@ -147,9 +201,9 @@ int main()
     //* Dislpay chess pieces
     wcout << endl;
 
-    wcout << WHITE_KING << " " << WHITE_QUEEN << " " << WHITE_ROOK << " " << WHITE_BISHOP << " " << WHITE_KNIGHT << " " << WHITE_PAWN << endl;
-
     wcout << BLACK_KING << " " << BLACK_QUEEN << " " << BLACK_ROOK << " " << BLACK_BISHOP << " " << BLACK_KNIGHT << " " << BLACK_PAWN << endl;
+
+    wcout << WHITE_KING << " " << WHITE_QUEEN << " " << WHITE_ROOK << " " << WHITE_BISHOP << " " << WHITE_KNIGHT << " " << WHITE_PAWN << endl;
 
     return 0;
 }
@@ -190,12 +244,24 @@ void Symbol::display()
     wcout << unicode;
 }
 
+//* Override == operator
+bool Symbol::operator==(const Symbol &other) const
+{
+    return (unicode == other.unicode);
+}
+
+//* Override != operator
+bool Symbol::operator!=(const Symbol &other) const
+{
+    return !(*this == other);
+}
+
 ///////////////////////
 // Chess Piece Class //
 ///////////////////////
 
 //* Constructor with position and symbol (parameters)
-ChessPiece::ChessPiece(Position pos, Symbol sym) : position(pos), symbol(sym) {}
+ChessPiece::ChessPiece(Position pos) : position(pos) {}
 
 //* Get the position of the chess piece
 Position ChessPiece::getPosition()
@@ -203,22 +269,10 @@ Position ChessPiece::getPosition()
     return position;
 }
 
-//* Get the symbol of the chess piece
-Symbol ChessPiece::getSymbol()
-{
-    return symbol;
-}
-
 //* Get displacement of the chess piece
 Position ChessPiece::getDisplacement(Position destination)
 {
     return position - destination;
-}
-
-//* Display the chess piece
-void ChessPiece::display()
-{
-    wcout << symbol.unicode;
 }
 
 /////////////////
@@ -244,6 +298,18 @@ void Board::clear()
     }
 }
 
+//* Get the box at a specific position
+Symbol Board::getBox(Position position)
+{
+    return boxes[position.row][position.column];
+}
+
+//* Set the box at a specific position
+void Board::setBox(Position position, Symbol symbol)
+{
+    boxes[position.row][position.column] = symbol;
+}
+
 //* Display the board
 void Board::display()
 {
@@ -256,6 +322,61 @@ void Board::display()
         }
         wcout << endl;
     }
+}
+
+////////////////
+// Pawn Class //
+////////////////
+
+//* Check valdity of the move
+bool Pawn::checkMoveValidity(Position destination, vector<Position> initial_positions, Board &board)
+{
+    //* Get the displacement of the pawn
+    Position displacement = getDisplacement(destination);
+
+    //* Check if the pawn is moving forward
+    if (displacement == valid_displament[0]) //? (1, 0)
+    {
+        return true; //! Forward move
+    }
+
+    //* Check if the double move is valid
+    else if (displacement == valid_displament[1]) //? (2, 0)
+    {
+        for (auto &&pos : initial_positions)
+        {
+            if (position == pos)
+            {
+                return true; //! Double forward move, only on the initial displacement move
+            }
+        }
+        return false; //! Not a double forward move
+    }
+
+    //* Check if the pawn is capturing a piece diagonally
+    else if (displacement == valid_displament[2] && (board.getBox(destination) != Symbol(HOLLOW_CIRCLE) || board.getBox(destination) != Symbol(FILLED_CIRCLE))) //? (1, 1)
+    {
+        return true; //! Diagonal capture move
+    }
+
+    //* Not a valid move
+    return false; //! Not a valid move
+}
+
+//////////////////////
+// White Pawn class //
+//////////////////////
+
+//* Check if the move is valid
+bool WhitePawn::isValidMove(Position destination, Board &board)
+{
+    //! Check if the pawn is not moving backward
+    if (position.row > destination.row)
+    {
+        checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
+    }
+
+    return false;
 }
 
 ///////////////
