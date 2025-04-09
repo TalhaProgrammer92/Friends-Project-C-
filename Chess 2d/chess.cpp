@@ -117,6 +117,9 @@ public:
     //* Get the box at a specific position
     Symbol getBox(Position position);
 
+    //* Check if the specific box is empty
+    bool isEmptyBox(Position position);
+
     //* Set the box at a specific position
     void setBox(Position position, Symbol symbol);
 
@@ -345,6 +348,12 @@ Symbol Board::getBox(Position position)
     return boxes[position.row][position.column];
 }
 
+//* Check if the specific box is empty
+bool Board::isEmptyBox(Position position)
+{
+    return (boxes[position.row][position.column] == Symbol(HOLLOW_CIRCLE) || boxes[position.row][position.column] == Symbol(FILLED_CIRCLE));
+}
+
 //* Set the box at a specific position
 void Board::setBox(Position position, Symbol symbol)
 {
@@ -395,7 +404,7 @@ bool Pawn::checkMoveValidity(Position destination, vector<Position> initial_posi
     }
 
     //* Check if the pawn is capturing a piece diagonally
-    else if (displacement == valid_displament[2] && board.getBox(destination) != Symbol(HOLLOW_CIRCLE) && board.getBox(destination) != Symbol(FILLED_CIRCLE)) //? (1, 1)
+    else if (displacement == valid_displament[2] && !board.isEmptyBox(displacement)) //? (1, 1)
     {
         return true; //! Diagonal capture move
     }
@@ -471,7 +480,7 @@ bool Bishop::isValidMove(Position destination, Board &board)
         for (auto &&pos : getPathPositions(destination))
         {
             //! Check if the path is clear
-            if (board.getBox(pos) != Symbol(HOLLOW_CIRCLE) && board.getBox(pos) != Symbol(FILLED_CIRCLE))
+            if (!board.isEmptyBox(pos))
             {
                 return false; //! Not a valid move
             }
