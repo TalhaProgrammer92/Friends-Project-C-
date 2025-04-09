@@ -172,6 +172,30 @@ public:
     bool isValidMove(Position destination, Board &board) override;
 };
 
+//////////////////////
+// Black Pawn class //
+//////////////////////
+class BlackPawn : public Pawn
+{
+private:
+    vector<Position> initial_positions = {
+        Position(1, 0), //? Initial position of the black pawn
+        Position(1, 1),
+        Position(1, 2),
+        Position(1, 3),
+        Position(1, 4),
+        Position(1, 5),
+        Position(1, 6),
+        Position(1, 7)};
+
+public:
+    //* Constructor with position and symbol (parameters)
+    BlackPawn(Position pos) : Pawn(pos) {}
+
+    //* Check if the move is valid
+    bool isValidMove(Position destination, Board &board) override;
+};
+
 ///////////////
 // Functions //
 ///////////////
@@ -201,9 +225,9 @@ int main()
     //* Dislpay chess pieces
     wcout << endl;
 
-    wcout << BLACK_KING << " " << BLACK_QUEEN << " " << BLACK_ROOK << " " << BLACK_BISHOP << " " << BLACK_KNIGHT << " " << BLACK_PAWN << endl;
+    wcout << "Black: " << BLACK_KING << " " << BLACK_QUEEN << " " << BLACK_ROOK << " " << BLACK_BISHOP << " " << BLACK_KNIGHT << " " << BLACK_PAWN << endl;
 
-    wcout << WHITE_KING << " " << WHITE_QUEEN << " " << WHITE_ROOK << " " << WHITE_BISHOP << " " << WHITE_KNIGHT << " " << WHITE_PAWN << endl;
+    wcout << "White: " << WHITE_KING << " " << WHITE_QUEEN << " " << WHITE_ROOK << " " << WHITE_BISHOP << " " << WHITE_KNIGHT << " " << WHITE_PAWN << endl;
 
     return 0;
 }
@@ -372,6 +396,22 @@ bool WhitePawn::isValidMove(Position destination, Board &board)
 {
     //! Check if the pawn is not moving backward
     if (position.row > destination.row)
+    {
+        checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
+    }
+
+    return false;
+}
+
+//////////////////////
+// Black Pawn class //
+//////////////////////
+
+//* Check if the move is valid
+bool BlackPawn::isValidMove(Position destination, Board &board)
+{
+    //! Check if the pawn is not moving backward
+    if (position.row < destination.row)
     {
         checkMoveValidity(destination, initial_positions, board); //! Check if the move is valid
     }
