@@ -16,6 +16,13 @@ class LogicState
         //* Operators
         bool operator==(const LogicState& state);
         bool operator!=(const LogicState& state);
+        
+        //* Display (ostream)
+        friend ostream& operator<<(ostream& os, const LogicState& state)
+        {
+            (state.state) ? os << "true" : os << "false";
+            return os;
+        }
 };
 LogicState::LogicState(bool state = false) : state(state) {}
 
@@ -235,7 +242,7 @@ int main()
 {
     XorGate _xor(3);
 
-    cout << _xor.getOutput().state << endl;
+    cout << _xor.getOutput() << endl;
     
     return 0;
 }
