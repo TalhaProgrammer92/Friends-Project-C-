@@ -70,7 +70,7 @@ Gate::~Gate()
 }
 
 //////////////
-// And Gate //
+// AND Gate //
 //////////////
 class AndGate : public Gate
 {
@@ -80,9 +80,6 @@ class AndGate : public Gate
 
         //* Operation
         LogicState getOutput() const override;
-
-        //* Destructor
-        ~AndGate();
 };
 AndGate::AndGate(int size) : Gate(size) {}
 
@@ -96,9 +93,28 @@ LogicState AndGate::getOutput() const
     return state;
 }
 
-AndGate::~AndGate()
+/////////////
+// OR Gate //
+/////////////
+class OrGate : public Gate
 {
-    delete states;
+    public:
+        //* Constructor
+        OrGate(int size);
+
+        //* Operation
+        LogicState getOutput() const override;
+};
+OrGate::OrGate(int size) : Gate(size) {}
+
+LogicState OrGate::getOutput() const
+{
+    LogicState state(0);
+
+    for (int i = 0; i < size; i++)
+        state.state = state.state | states[i].state;
+    
+    return state;
 }
 
 /////////////////
