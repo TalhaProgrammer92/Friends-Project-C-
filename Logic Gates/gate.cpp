@@ -117,6 +117,58 @@ LogicState OrGate::getOutput() const
     return state;
 }
 
+//////////////
+// NOT Gate //
+//////////////
+class NotGate : public Gate
+{
+    public:
+        //* Constructor
+        NotGate();
+
+        //* Operation
+        LogicState getOutput() const override;
+};
+NotGate::NotGate() : Gate(1) {}
+
+LogicState NotGate::getOutput() const
+{
+    return LogicState(!states[0].state);
+}
+
+///////////////
+// NAND Gate //
+///////////////
+class NandGate : public Gate
+{
+    public:
+        //* Constructor
+        NandGate(int size);
+
+        //* Operation
+        LogicState getOutput() const override;
+};
+NandGate::NandGate(int size) : Gate(size) {}
+
+LogicState NandGate::getOutput() const
+{
+    NotGate _not;
+
+    _not.setState(
+        AndGate(size).getOutput(), 0
+    );
+
+    return _not.getOutput();
+}
+
+//////////////
+// NOR Gate //
+//////////////
+class NorGate : public Gate
+{
+
+};
+
 /////////////////
 // Entry Point //
 /////////////////
