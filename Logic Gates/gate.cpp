@@ -7,31 +7,31 @@ using namespace std;
 /////////////////
 class LogicState
 {
-    public:
-        bool state;
+public:
+    bool state;
 
-        //* Constructor
-        LogicState(bool state);
+    //* Constructor
+    LogicState(bool state);
 
-        //* Operators
-        bool operator==(const LogicState& state);
-        bool operator!=(const LogicState& state);
-        
-        //* Display (ostream)
-        friend ostream& operator<<(ostream& os, const LogicState& state)
-        {
-            (state.state) ? os << "true" : os << "false";
-            return os;
-        }
+    //* Operators
+    bool operator==(const LogicState &state);
+    bool operator!=(const LogicState &state);
+
+    //* Display (ostream)
+    friend ostream &operator<<(ostream &os, const LogicState &state)
+    {
+        (state.state) ? os << "true" : os << "false";
+        return os;
+    }
 };
 LogicState::LogicState(bool state = false) : state(state) {}
 
-bool LogicState::operator==(const LogicState& state)
+bool LogicState::operator==(const LogicState &state)
 {
     return this->state == state.state;
 }
 
-bool LogicState::operator!=(const LogicState& state)
+bool LogicState::operator!=(const LogicState &state)
 {
     return this->state != state.state;
 }
@@ -41,54 +41,54 @@ bool LogicState::operator!=(const LogicState& state)
 //////////
 class Gate
 {
-    protected:
-        LogicState* states;
-        int size;
-    
-    public:
-        //* Constructor
-        Gate(int size);
+protected:
+    LogicState *states;
+    int size;
 
-        //* Set all
-        void setAll(const LogicState& state);
+public:
+    //* Constructor
+    Gate(int size);
 
-        //* Getter
-        LogicState* getState(const int& index);
+    //* Set all
+    void setAll(const LogicState &state);
 
-        //* Setter
-        void setState(const LogicState& state, const int& index);
+    //* Getter
+    LogicState *getState(const int &index);
 
-        //* Get number of states
-        int getStatesAmount(const LogicState& state) const;
+    //* Setter
+    void setState(const LogicState &state, const int &index);
 
-        //* Operation
-        virtual LogicState getOutput() const = 0;
+    //* Get number of states
+    int getStatesAmount(const LogicState &state) const;
 
-        //* Destructor
-        ~Gate();
+    //* Operation
+    virtual LogicState getOutput() const = 0;
+
+    //* Destructor
+    ~Gate();
 };
 Gate::Gate(int size) : size(size)
 {
     states = new LogicState[size];
 }
 
-void Gate::setAll(const LogicState& state)
+void Gate::setAll(const LogicState &state)
 {
     for (int i = 0; i < size; i++)
         states[i] = state;
 }
 
-LogicState* Gate::getState(const int& index)
+LogicState *Gate::getState(const int &index)
 {
     return &states[index];
 }
 
-void Gate::setState(const LogicState& state, const int& index)
+void Gate::setState(const LogicState &state, const int &index)
 {
     states[index] = state;
 }
 
-int Gate::getStatesAmount(const LogicState& state) const
+int Gate::getStatesAmount(const LogicState &state) const
 {
     int count = 0;
 
@@ -108,12 +108,12 @@ Gate::~Gate()
 //////////////
 class AndGate : public Gate
 {
-    public:
-        //* Constructor
-        AndGate(int size);
+public:
+    //* Constructor
+    AndGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 AndGate::AndGate(int size) : Gate(size) {}
 
@@ -123,7 +123,7 @@ LogicState AndGate::getOutput() const
 
     for (int i = 0; i < size; i++)
         state.state = state.state & states[i].state;
-    
+
     return state;
 }
 
@@ -132,12 +132,12 @@ LogicState AndGate::getOutput() const
 /////////////
 class OrGate : public Gate
 {
-    public:
-        //* Constructor
-        OrGate(int size);
+public:
+    //* Constructor
+    OrGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 OrGate::OrGate(int size) : Gate(size) {}
 
@@ -147,7 +147,7 @@ LogicState OrGate::getOutput() const
 
     for (int i = 0; i < size; i++)
         state.state = state.state | states[i].state;
-    
+
     return state;
 }
 
@@ -156,12 +156,12 @@ LogicState OrGate::getOutput() const
 //////////////
 class NotGate : public Gate
 {
-    public:
-        //* Constructor
-        NotGate();
+public:
+    //* Constructor
+    NotGate();
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 NotGate::NotGate() : Gate(1) {}
 
@@ -175,12 +175,12 @@ LogicState NotGate::getOutput() const
 ///////////////
 class NandGate : public Gate
 {
-    public:
-        //* Constructor
-        NandGate(int size);
+public:
+    //* Constructor
+    NandGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 NandGate::NandGate(int size) : Gate(size) {}
 
@@ -198,12 +198,12 @@ LogicState NandGate::getOutput() const
 //////////////
 class NorGate : public Gate
 {
-    public:
-        //* Constructor
-        NorGate(int size);
+public:
+    //* Constructor
+    NorGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 NorGate::NorGate(int size) : Gate(size) {}
 
@@ -221,18 +221,18 @@ LogicState NorGate::getOutput() const
 //////////////
 class XorGate : public Gate
 {
-    public:
-        //* Constructor
-        XorGate(int size);
+public:
+    //* Constructor
+    XorGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 XorGate::XorGate(int size) : Gate(size) {}
 
 LogicState XorGate::getOutput() const
 {
-    return LogicState(!(getStatesAmount(LogicState(1))%2));
+    return LogicState(!(getStatesAmount(LogicState(1)) % 2));
 }
 
 ///////////////
@@ -240,12 +240,12 @@ LogicState XorGate::getOutput() const
 ///////////////
 class XnorGate : public Gate
 {
-    public:
-        //* COnstructor
-        XnorGate(int size);
+public:
+    //* Constructor
+    XnorGate(int size);
 
-        //* Operation
-        LogicState getOutput() const override;
+    //* Operation
+    LogicState getOutput() const override;
 };
 XnorGate::XnorGate(int size) : Gate(size) {}
 
@@ -258,6 +258,32 @@ LogicState XnorGate::getOutput() const
     return _not.getOutput();
 }
 
+//////////
+// Wire //
+//////////
+template <class Source, class Destination>
+class Wire
+{
+private:
+    Source *src_gate;
+    Destination *dest_gate;
+    LogicState *src_state, *dest_state;
+
+public:
+    //* Constructor
+    Wire(const Source &src, const Destination &dest, const LogicState &src_state, const LogicState& dest_state) : src_gate(src), dest_gate(dest), src_state(src_state), dest_state(dest_state) {}
+
+    //* Getters
+    Source *getSource() { return src_gate; }
+    Destination *getDestination() { return dest_gate; }
+
+    //* Method Simulate
+    void simulate()
+    {
+        this->dest_state = this->src_state;
+    }
+};
+
 /////////////////
 // Entry Point //
 /////////////////
@@ -265,11 +291,16 @@ int main()
 {
     XorGate _xor(3);
 
-    cout << _xor.getOutput() << endl;
+    // cout << _xor.getOutput() << endl;
 
     XnorGate _xnor(3);
 
+    //! Have bug
+    Wire<XorGate, XnorGate> wire(_xor, _xnor, _xor.getState(0), _xnor.getState(1));
+
+    wire.simulate();
+
     cout << _xnor.getOutput() << endl;
-    
+
     return 0;
 }
