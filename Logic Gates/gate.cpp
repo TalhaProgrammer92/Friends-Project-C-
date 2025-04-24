@@ -12,8 +12,22 @@ class LogicState
 
         //* Constructor
         LogicState(bool state);
+
+        //* Operators
+        bool operator==(const LogicState& state);
+        bool operator!=(const LogicState& state);
 };
 LogicState::LogicState(bool state = false) : state(state) {}
+
+bool LogicState::operator==(const LogicState& state)
+{
+    return this->state == state.state;
+}
+
+bool LogicState::operator!=(const LogicState& state)
+{
+    return this->state != state.state;
+}
 
 //////////
 // Gate //
@@ -36,6 +50,9 @@ class Gate
 
         //* Setter
         void setState(const LogicState& state, const int& index);
+
+        //* Get number of states
+        int getStatesAmount(const LogicState& state) const;
 
         //* Operation
         virtual LogicState getOutput() const = 0;
@@ -62,6 +79,16 @@ LogicState* Gate::getState(const int& index)
 void Gate::setState(const LogicState& state, const int& index)
 {
     states[index] = state;
+}
+
+int Gate::getStatesAmount(const LogicState& state) const
+{
+    int count = 0;
+
+    for (int i = 0; i < size; i++)
+        count += states[i] == state;
+
+    return count;
 }
 
 Gate::~Gate()
@@ -154,9 +181,7 @@ LogicState NandGate::getOutput() const
 {
     NotGate _not;
 
-    _not.setState(
-        AndGate(size).getOutput(), 0
-    );
+    _not.setState(AndGate(size).getOutput(), 0);
 
     return _not.getOutput();
 }
@@ -166,20 +191,51 @@ LogicState NandGate::getOutput() const
 //////////////
 class NorGate : public Gate
 {
+    public:
+        //* Constructor
+        NorGate(int size);
 
+        //* Operation
+        LogicState getOutput() const override;
 };
+NorGate::NorGate(int size) : Gate(size) {}
+
+LogicState NorGate::getOutput() const
+{
+    NotGate _not;
+
+    _not.setState(OrGate(size).getOutput(), 0);
+
+    return _not.getOutput();
+}
+
+//////////////
+// XOR Gate //
+//////////////
+class XorGate : public Gate
+{
+    public:
+        //* Constructor
+        XorGate(int size);
+
+        //* Operation
+        LogicState getOutput() const override;
+};
+XorGate::XorGate(int size) : Gate(size) {}
+
+LogicState XorGate::getOutput() const
+{
+    return LogicState(!(getStatesAmount(LogicState(1))%2));
+}
 
 /////////////////
 // Entry Point //
 /////////////////
 int main()
 {
-    AndGate _and(5);
+    XorGate _xor(3);
 
-    _and.setAll(LogicState(1));
-    _and.setState(LogicState(0), 3);
-
-    cout << _and.getOutput().state << endl;
+    cout << _xor.getOutput().state << endl;
     
     return 0;
 }
