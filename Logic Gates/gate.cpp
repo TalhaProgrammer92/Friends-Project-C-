@@ -235,6 +235,29 @@ LogicState XorGate::getOutput() const
     return LogicState(!(getStatesAmount(LogicState(1))%2));
 }
 
+///////////////
+// XNOR Gate //
+///////////////
+class XnorGate : public Gate
+{
+    public:
+        //* COnstructor
+        XnorGate(int size);
+
+        //* Operation
+        LogicState getOutput() const override;
+};
+XnorGate::XnorGate(int size) : Gate(size) {}
+
+LogicState XnorGate::getOutput() const
+{
+    NotGate _not;
+
+    _not.setState(XorGate(size).getOutput(), 0);
+
+    return _not.getOutput();
+}
+
 /////////////////
 // Entry Point //
 /////////////////
@@ -243,6 +266,10 @@ int main()
     XorGate _xor(3);
 
     cout << _xor.getOutput() << endl;
+
+    XnorGate _xnor(3);
+
+    cout << _xnor.getOutput() << endl;
     
     return 0;
 }
